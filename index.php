@@ -1,5 +1,6 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/creacionDeTablas.php');
+$conn = new MyDatabase();
 ?>
 <html lang="es">
 <head>
@@ -52,7 +53,6 @@ require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/creacionDeT
     <!-- Tabla con el nuevo orden de columnas -->
     <table class="table table-bordered table-striped text-center" >
         <?php
-        $conn = new MyDatabase();
         if (empty($_GET['pokemon'])) {
             $result = $conn->query("SELECT * FROM pokemon");
             crearTabla($result);

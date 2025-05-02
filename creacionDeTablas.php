@@ -24,7 +24,7 @@ function crearTabla($datos)
             }else{
                 echo "<td class='align-middle'></td>";
             }
-            echo "<td class='align-middle'>{$fila["numero_pokedex"]}</td>";
+            echo "<td class='align-middle'>#{$fila["numero_pokedex"]}</td>";
             echo "<td class='align-middle'>{$fila["nombre"]}</td>";
             if (isset($_SESSION['user'])) {
                 echo "<td class='align-middle'>";

@@ -1,5 +1,7 @@
 <?php
-
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/MyDatabase.php');
+$conn = new MyDatabase();
+$pokemon = $_GET["pokemon"];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -38,37 +40,45 @@
             <img src="imgPokemon/Pokeball.png" alt="Pokébola" width="50">
         </div>
         <div class="col text-center">
-            <h1>Pokedex</h1>
+            <h1><a href="index.php" class="text-decoration-none text-black">Pokedex</a></h1>
         </div>
         <div class="col-3"></div>
     </div>
 
     <!-- Detalle del Pokémon principal -->
-    <div class="row justify-content-center align-items-center mb-5">
-        <div class="col-md-4 text-center">
-            <div class="bg-light p-3 rounded d-inline-block">
-                <img src="./imgPokemon/charmander.png" alt="Charmander" class="img-fluid" style="max-width: 300px;">
-            </div>
-        </div>
+    <?php
+    $result = $conn->query("SELECT * FROM pokemon WHERE nombre = '$pokemon'");
+    $obtenido = mysqli_fetch_assoc($result);
 
-        <div class="col-md-6">
-            <h2 class="text-center text-md-start">Charmander</h2>
-            <p class="lead">
-                Charmander tiene una llama encendida en la punta de su cola que refleja su salud emocional.
-                Si está feliz, la llama brilla con fuerza. Le encanta estar en lugares cálidos.
-            </p>
-            <p><strong>#004</strong></p>
-            <p><strong>Tipo:</strong> Fuego</p>
-        </div>
-    </div>
+    echo "<div class='row justify-content-center align-items-center mb-5'>";
 
-    <!-- Sección de Evoluciones -->
+    echo "<div class='col-md-4 text-center'>";
+    echo "<div class='bg-light p-3 rounded d-inline-block'>";
+    echo "<img src='{$obtenido['img_url']}' alt='{$obtenido['nombre']}' class='img-fluid' style='max-width: 300px;'>";
+    echo "</div>";
+    echo "</div>";
+
+    echo "<div class='col-md-6'>";
+    echo "<h2 class='text-center text-md-start'>{$obtenido['nombre']}</h2>";
+    echo "<p><strong>#{$obtenido['numero_pokedex']}</strong></p>";
+    echo "<p class='lead'>{$obtenido['descripcion']}</p>";
+
+    echo "<img src='./imgTipo/{$obtenido['tipo1']}.png' width='50'>";
+    if (!is_null($obtenido["tipo2"])) {
+        echo "<img src='./imgTipo/{$obtenido['tipo2']}.png' width='50'>";
+    }
+    echo "</div>";
+
+    echo "</div>";
+    ?>
+    <!--
+        Sección de Evoluciones
     <div class="row">
         <div class="col-12">
             <h2 class="text-center mb-4">Evoluciones de Charmander</h2>
 
             <div class="d-flex flex-wrap justify-content-center align-items-center">
-                <!-- Charmander -->
+                Charmander
                 <div class="text-center mb-4 mx-2 col-12 col-md-auto">
                     <div class="bg-light p-3 rounded d-inline-block">
                         <img src="./imgPokemon/charmander.png" alt="Charmander" class="img-fluid" style="max-width: 150px;">
@@ -78,13 +88,13 @@
                     <p>Tipo: Fuego</p>
                 </div>
 
-                <!-- Ícono 1 -->
+                 Ícono 1
                 <div class="d-flex align-items-center justify-content-center mb-4 mx-2 col-auto" style="height: 100px;">
                     <i class="fas fa-greater-than icon-horizontal" style="font-size: 30px;"></i>
                     <i class="fas fa-angle-down icon-vertical" style="font-size: 30px;"></i>
                 </div>
 
-                <!-- Charmeleon -->
+                Charmeleon
                 <div class="text-center mb-4 mx-2 col-12 col-md-auto">
                     <div class="bg-light p-3 rounded d-inline-block">
                         <img src="./imgPokemon/charmeleon.png" alt="Charmeleon" class="img-fluid" style="max-width: 150px;">
@@ -94,13 +104,13 @@
                     <p>Tipo: Fuego</p>
                 </div>
 
-                <!-- Ícono 2 -->
+                Ícono 2
                 <div class="d-flex align-items-center justify-content-center mb-4 mx-2 col-auto" style="height: 100px;">
                     <i class="fas fa-greater-than icon-horizontal" style="font-size: 30px;"></i>
                     <i class="fas fa-angle-down icon-vertical" style="font-size: 30px;"></i>
                 </div>
 
-                <!-- Charizard -->
+                Charizard
                 <div class="text-center mb-4 mx-2 col-12 col-md-auto">
                     <div class="bg-light p-3 rounded d-inline-block">
                         <img src="./imgPokemon/charizard.png" alt="Charizard" class="img-fluid" style="max-width: 150px;">
@@ -113,7 +123,7 @@
         </div>
     </div>
 </div>
-
+-->
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
