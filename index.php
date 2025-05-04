@@ -1,7 +1,10 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/creacionDeTablas.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/creacion_tabla.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/mensaje_error.php');
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/mensaje_exito.php');
 $conn = new MyDatabase();
 ?>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -13,12 +16,12 @@ $conn = new MyDatabase();
 </head>
 <body>
 <!-- Contenedor principal -->
-<div class="container mt-3">
+<div class="container mt-5">
     <!-- Fila para el título y el formulario -->
     <div class="row align-items-center mb-4">
         <!-- Logo de la Pokébola a la izquierda -->
         <div class="col-2">
-            <img src="imgPokemon/Pokeball.png" alt="Pokébola" width="50">
+            <a href="index.php"><img src="misc/Pokeball.png" alt="Pokebola" width="50"></a>
         </div>
         <!-- Título centrado -->
         <div class="col text-center">
@@ -44,36 +47,37 @@ $conn = new MyDatabase();
         </div>
     </div>
 
+
     <!-- Formulario de búsqueda -->
     <form action="index.php" method="GET" class="d-flex justify-content-center mb-4 p-5">
-        <input type="text" name="pokemon" class="form-control w-50" placeholder="Buscar Pokemon">
+        <input type="text" name="dato" class="form-control w-50" placeholder="Buscar Pokemon">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
     </form>
 
     <!-- Tabla con el nuevo orden de columnas -->
     <table class="table table-bordered table-striped text-center" >
         <?php
-        if (empty($_GET['pokemon'])) {
+        if (empty($_GET['dato'])) {
             $result = $conn->query("SELECT * FROM pokemon");
-            crearTabla($result);
+            echo crearTabla($result);
         }else{
-            $pokemon = $_GET['pokemon'];
-            $result = $conn->query("SELECT * FROM pokemon WHERE nombre = '$pokemon'");
+            $dato = $_GET['dato'];
+            $result = $conn->query("SELECT * FROM pokemon WHERE nombre = '$dato' OR numero_pokedex = '$dato' OR tipo1 = '$dato' OR tipo2 = '$dato'");
             if (mysqli_num_rows($result) == 0) {
                 echo '
                         <div class="alert alert-danger text-center" role="alert">
-                            Pokémon no encontrado
+                            Pokemon no encontrado
                         </div>';
                 $result = $conn->query("SELECT * FROM pokemon");
             }
-            crearTabla($result);
+            echo crearTabla($result);
         }
         ?>
     </table>
 
         <?php
             if (isset($_SESSION['user'])) {
-                echo '<a href = "crearPokemon.php" class="btn btn-success w-100 mt-4 mb-4" > Crear un nuevo Pokémon </a >
+                echo '<a href = "crear_pokemon.php" class="btn btn-success w-100 mt-4 mb-4" > Crear un nuevo Pokémon </a >
             </div>';
             }
             ?>

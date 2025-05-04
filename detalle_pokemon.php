@@ -1,7 +1,9 @@
 <?php
+session_start();
+require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/mensaje_exito.php');
 require_once ($_SERVER['DOCUMENT_ROOT'] . '/rodriguezAgustin/Pokedex/MyDatabase.php');
 $conn = new MyDatabase();
-$pokemon = $_GET["pokemon"];
+$idPokemon = $_GET["idPokemon"];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -37,17 +39,32 @@ $pokemon = $_GET["pokemon"];
     <!-- Título y logo -->
     <div class="row align-items-center mb-4">
         <div class="col-2">
-            <img src="imgPokemon/Pokeball.png" alt="Pokébola" width="50">
+            <a href="index.php"><img src="misc/Pokeball.png" alt="Pokebola" width="50"></a>
         </div>
         <div class="col text-center">
             <h1><a href="index.php" class="text-decoration-none text-black">Pokedex</a></h1>
         </div>
-        <div class="col-3"></div>
+        <div class="col-3">
+                <?php
+                if (!isset($_SESSION['user'])) {
+                    echo '
+                    <form action="login.php" method="POST" class="d-flex justify-content-end">
+                        <input type="text" name="user" class="form-control me-2" placeholder="Usuario">
+                        <input type="password" name="pass" class="form-control me-2" placeholder="Contraseña">
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                    </form>';
+                }else{
+                    echo '<div class=""> <h2 class="">Bienvenido: ' . "{$_SESSION["user"]}" . '</h2>';
+                    echo "<a href='logout.php' class='btn btn-danger form-control me-2'>Desconectarse</a></div>";
+                }
+
+                ?>
+        </div>
     </div>
 
     <!-- Detalle del Pokémon principal -->
     <?php
-    $result = $conn->query("SELECT * FROM pokemon WHERE nombre = '$pokemon'");
+    $result = $conn->query("SELECT * FROM pokemon WHERE id = '$idPokemon'");
     $obtenido = mysqli_fetch_assoc($result);
 
     echo "<div class='row justify-content-center align-items-center mb-5'>";
@@ -63,9 +80,9 @@ $pokemon = $_GET["pokemon"];
     echo "<p><strong>#{$obtenido['numero_pokedex']}</strong></p>";
     echo "<p class='lead'>{$obtenido['descripcion']}</p>";
 
-    echo "<img src='./imgTipo/{$obtenido['tipo1']}.png' width='50'>";
-    if (!is_null($obtenido["tipo2"])) {
-        echo "<img src='./imgTipo/{$obtenido['tipo2']}.png' width='50'>";
+    echo "<img src='imgTipo/{$obtenido['tipo1']}.png' width='50'>";
+    if (!empty($obtenido["tipo2"])) {
+        echo "<img src='imgTipo/{$obtenido['tipo2']}.png' width='50' class='ms-1'>";
     }
     echo "</div>";
 
@@ -81,7 +98,7 @@ $pokemon = $_GET["pokemon"];
                 Charmander
                 <div class="text-center mb-4 mx-2 col-12 col-md-auto">
                     <div class="bg-light p-3 rounded d-inline-block">
-                        <img src="./imgPokemon/charmander.png" alt="Charmander" class="img-fluid" style="max-width: 150px;">
+                        <img src="imgPokemon/charmander.png" alt="Charmander" class="img-fluid" style="max-width: 150px;">
                     </div>
                     <h4 class="mt-2">Charmander</h4>
                     <p>#004</p>
@@ -97,7 +114,7 @@ $pokemon = $_GET["pokemon"];
                 Charmeleon
                 <div class="text-center mb-4 mx-2 col-12 col-md-auto">
                     <div class="bg-light p-3 rounded d-inline-block">
-                        <img src="./imgPokemon/charmeleon.png" alt="Charmeleon" class="img-fluid" style="max-width: 150px;">
+                        <img src="imgPokemon/charmeleon.png" alt="Charmeleon" class="img-fluid" style="max-width: 150px;">
                     </div>
                     <h4 class="mt-2">Charmeleon</h4>
                     <p>#005</p>
@@ -113,7 +130,7 @@ $pokemon = $_GET["pokemon"];
                 Charizard
                 <div class="text-center mb-4 mx-2 col-12 col-md-auto">
                     <div class="bg-light p-3 rounded d-inline-block">
-                        <img src="./imgPokemon/charizard.png" alt="Charizard" class="img-fluid" style="max-width: 150px;">
+                        <img src="imgPokemon/charizard.png" alt="Charizard" class="img-fluid" style="max-width: 150px;">
                     </div>
                     <h4 class="mt-2">Charizard</h4>
                     <p>#006</p>
